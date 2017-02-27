@@ -50,7 +50,7 @@ class SiteController extends Controller {
 		if (isset ( $_POST ['Usuario'] )) {
 			$model = Usuario::model()->findByAttributes($_POST['Usuario']);
 			if($model != null) {
-				$model->data_exclusao = new CDbExpression("datetime('now')");
+				$model->data_exclusao = new CDbExpression("datetime('now','localtime')");
 				echo CJSON::encode($model->update()?'OK':'NOK');
 			} else { 
 				echo CJSON::encode('O Usuário não existe!');
@@ -66,7 +66,7 @@ class SiteController extends Controller {
 		if (isset ( $_POST ['LogAcesso'] )) {
 			$model = new LogAcesso();
 			$model->attributes = $_POST['LogAcesso'];
-			$model->data_hora = new CDbExpression("datetime('now')");
+			$model->data_hora = new CDbExpression("datetime('now','localtime')");
 			if($model->validate())
 				echo CJSON::encode($model->save()?'OK':'NOK');
 			else 
