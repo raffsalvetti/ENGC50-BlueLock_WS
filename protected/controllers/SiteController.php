@@ -29,12 +29,21 @@ class SiteController extends Controller {
 	}
 	public function actionEditarUsuario() {
 		if (isset ( $_POST ['Usuario'] )) {
-			$model = new Usuario();
-			$model->attributes = $_POST['Usuario'];
-			if($model->validate())
-				echo CJSON::encode($model->update()?'OK':'NOK');
-			else 
+			Yii::log("POST: " . print_r($_POST, true), "DEBUG");
+			$u = new Usuario();
+			$u->attributes = $_POST['Usuario'];
+			$model = Usuario::model()->findByPk($_POST['Usuario']['codigo']);
+			if($u->validate(array("senha"))){
+				if($model != null){
+					$model->senha = $u->senha;
+					$model->cod_tipo_usuario = $u->cod_tipo_usuario;
+					echo CJSON::encode($model->save()?'OK':'NOK');
+				} else {
+					echo CJSON::encode("Usuário não encontrado!");
+				}
+			} else { 
 				echo CJSON::encode($model->getErrors());
+			}
 		}
 	}
 	public function actionDeletarUsuario() {
